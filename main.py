@@ -1,6 +1,6 @@
 import discord
 import os
-import GachaGame
+from game import GachaGame
 from dotenv import load_dotenv
 
 load_dotenv()
