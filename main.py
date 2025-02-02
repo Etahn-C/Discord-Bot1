@@ -11,15 +11,13 @@ DATA = os.getenv("DATA_FILE")
 
 
 class MyClient(discord.Client):
-    def start_game(self):
-        self.game = GachaGame(DATA)
-        self.game.load()
-
     async def on_ready(self):
         print("Logged on as", self.user)
         for guild in client.guilds:
             if guild.name == GUILD:
                 break
+        self.game = GachaGame(DATA)
+        self.game.load()
 
         print(
             f"{client.user} is connected to the following guild:\n"
@@ -61,5 +59,4 @@ class MyClient(discord.Client):
 intents = discord.Intents.default()
 intents.message_content = True
 client = MyClient(intents=intents)
-client.start_game()
 client.run(TOKEN)
