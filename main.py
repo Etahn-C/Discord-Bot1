@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import os
-import random
 from game import GachaGame
 from dotenv import load_dotenv
 
@@ -54,7 +53,6 @@ async def inventory(ctx):
 
 @bot.command()
 async def shop(ctx):
-    player_id = str(ctx.author.id)
     response = gacha_game.shop()
     await ctx.send(response)
 
