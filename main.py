@@ -3,14 +3,21 @@ from discord.ext import commands
 import os
 from game import GachaGame
 from dotenv import load_dotenv
-
-load_dotenv()
+# Using python 3.12.2 virtual environment
+# pip install discord.py
+# pip install audioop-lts
+# pip install python-dotenv
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
 DATA = os.getenv("DATA_FILE")
+"""
+DISCORD_TOKEN="Your Token Here"
+DISCORD_GUILD="Not needed, can be left blank"
+DATA_FILE="your data file.json"
+"""
 
-
+load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="$", intents=intents)
