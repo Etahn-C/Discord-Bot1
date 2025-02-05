@@ -12,6 +12,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
 DATA = os.getenv("DATA_FILE")
 """
+.env file example
 DISCORD_TOKEN="Your Token Here"
 DISCORD_GUILD="Not needed, can be left blank"
 DATA_FILE="your data file.json"
