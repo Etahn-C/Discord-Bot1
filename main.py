@@ -1,5 +1,7 @@
 import discord
+from discord.ext import commands
 import os
+import random
 from game import GachaGame
 from dotenv import load_dotenv
 
@@ -10,53 +12,75 @@ GUILD = os.getenv("DISCORD_GUILD")
 DATA = os.getenv("DATA_FILE")
 
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print("Logged on as", self.user)
-        for guild in client.guilds:
-            if guild.name == GUILD:
-                break
-        self.game = GachaGame(DATA)
-        self.game.load()
-
-        print(
-            f"{client.user} is connected to the following guild:\n"
-            f"{guild.name} (id: {guild.id})\n"
-        )
-
-    async def on_message(self, message):
-        # don't respond to ourselves
-        if message.author == self.user:
-            return
-
-        # For testing purposes, if this don't work, bot died
-        if message.content.upper() == "$PING":
-            await message.channel.send("pong")
-
-        # Game Functions
-        if message.content.upper() == "$ADD PLAYER":
-            await message.channel.send((self.game.add_player(str(message.author))))
-            self.game.save()
-
-        if message.content.upper() == "$REMOVE PLAYER":
-            await message.channel.send((self.game.remove_player(str(message.author))))
-            self.game.save()
-
-        if message.content.upper() == "$RESET PLAYER":
-            await message.channel.send((self.game.reset_player(str(message.author))))
-            self.game.save()
-
-        if message.content.upper() == "$ROLL GACHA":
-            await message.channel.send((self.game.roll_gacha(str(message.author))))
-            self.game.save()
-
-        if message.content.upper() == "$INVENTORY":
-            await message.channel.send((self.game.inventory(str(message.author))))
-            self.game.save()
-
-
-# Discord API stuffs, not gonna mess with it.
 intents = discord.Intents.default()
 intents.message_content = True
-client = MyClient(intents=intents)
-client.run(TOKEN)
+bot = commands.Bot(command_prefix="$", intents=intents)
+gacha_game = GachaGame(DATA)
+gacha_game.load()
+
+@bot.command()
+async def add_player(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.add_player(player_id)
+    await ctx.send(response)
+    gacha_game.save()
+
+@bot.command()
+async def reset_player(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.reset_player(player_id)
+    await ctx.send(response)
+    gacha_game.save()
+
+@bot.command()
+async def remove_player(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.remove_player(player_id)
+    await ctx.send(response)
+    gacha_game.save()
+
+@bot.command()
+async def roll_gacha(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.roll_gacha(player_id)
+    await ctx.send(response)
+    gacha_game.save()
+
+@bot.command()
+async def inventory(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.inventory(player_id)
+    await ctx.send(response)
+
+@bot.command()
+async def shop(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.shop()
+    await ctx.send(response)
+
+@bot.command()
+async def save(ctx):
+    response = gacha_game.save()
+    await ctx.send(response)
+
+@bot.command()
+async def bank_account(ctx):
+    player_id = str(ctx.author.id)
+    response = gacha_game.bank_account(player_id)
+    await ctx.send(response)
+
+@bot.command()
+async def buy_item(ctx, *args):
+    player_id = str(ctx.author.id)
+    response = gacha_game.buy_item(player_id, ' '.join(args))
+    await ctx.send(response)
+    gacha_game.save()
+
+@bot.command()
+async def work(ctx, *args):
+    player_id = str(ctx.author.id)
+    response = gacha_game.work(player_id, ' '.join(args))
+    await ctx.send(response)
+    gacha_game.save()
+
+bot.run(TOKEN)
